@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+clock c; // Global clock
+int x, y, z = 0; // IMU out
+int f = 0; // Force out</declaration>
+	<template>
+		<name>XJoint</name>
+		<location id="id0" x="-59" y="-34">
+			<name x="-76" y="-68">Wait</name>
+		</location>
+		<location id="id1" x="93" y="-34">
+			<name x="76" y="-68">Move</name>
+		</location>
+		<init ref="id1"/>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="guard" x="0" y="8">x &gt; 180</label>
+			<nail x="17" y="8"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-8" y="-59">x &lt;= 180</label>
+		</transition>
+	</template>
+	<template>
+		<name>YJoint</name>
+		<location id="id2" x="-17" y="-25">
+			<name x="-34" y="-59">Move</name>
+		</location>
+		<init ref="id2"/>
+	</template>
+	<template>
+		<name>ZJoint</name>
+		<location id="id3" x="-59" y="-25">
+			<name x="-76" y="-59">Move</name>
+		</location>
+		<location id="id4" x="-246" y="-25">
+			<name x="-263" y="-59">Wait</name>
+		</location>
+		<init ref="id3"/>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-272" y="25">(z &gt;= 0 &amp;&amp; z &lt; 90) || (z &lt;= 0 &amp;&amp; z &gt; -90)</label>
+			<nail x="-153" y="17"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-212" y="-51">z &gt;= 90 || z &lt;= -90</label>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">GloveIMU</name>
+		<declaration>// Place local declarations here.</declaration>
+		<location id="id5" x="-76" y="-119">
+			<label kind="invariant" x="-93" y="-110">c &lt;= 60</label>
+		</location>
+		<location id="id6" x="-76" y="-289">
+			<name x="-94" y="-323">Start</name>
+			<label kind="invariant" x="-86" y="-272">c &lt; 1</label>
+		</location>
+		<init ref="id6"/>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id5"/>
+			<label kind="guard" x="-212" y="-68">z &lt; 180</label>
+			<label kind="assignment" x="-212" y="-51">z++</label>
+			<nail x="-229" y="-59"/>
+			<nail x="-221" y="-76"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id5"/>
+			<label kind="guard" x="-153" y="-25">y &lt; 90</label>
+			<label kind="assignment" x="-153" y="-8">y++</label>
+			<nail x="-93" y="-8"/>
+			<nail x="-102" y="-25"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id5"/>
+			<label kind="guard" x="59" y="-93">x &lt; 360</label>
+			<label kind="assignment" x="59" y="-76">x++</label>
+			<nail x="102" y="-102"/>
+			<nail x="85" y="-93"/>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id5"/>
+			<label kind="assignment" x="-68" y="-238">c = 0,
+x = 90,
+y = 0,
+z = 180</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id5"/>
+			<label kind="guard" x="-263" y="-119">z &gt; -180</label>
+			<label kind="assignment" x="-263" y="-102">z--</label>
+			<nail x="-238" y="-119"/>
+			<nail x="-263" y="-127"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id5"/>
+			<label kind="guard" x="-68" y="-17">y &gt; -90</label>
+			<label kind="assignment" x="-68" y="0">y--</label>
+			<nail x="-43" y="-25"/>
+			<nail x="-51" y="-8"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id5"/>
+			<label kind="guard" x="68" y="-161">x &gt; 0</label>
+			<label kind="assignment" x="68" y="-144">x--</label>
+			<nail x="85" y="-127"/>
+			<nail x="110" y="-119"/>
+		</transition>
+	</template>
+	<system>system XJoint, YJoint, ZJoint, GloveIMU;</system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>
